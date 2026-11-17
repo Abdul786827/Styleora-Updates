@@ -1,0 +1,6 @@
+{
+  "name": "STYLEORA",
+  "description": "Smart Hair Salon & Barber Appointment Booking System — Your Style, Your Time.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

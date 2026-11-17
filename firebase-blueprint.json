@@ -1,0 +1,253 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Registered customer or barber/salon owner profile.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID." },
+        "fullName": { "type": "string", "description": "User full name." },
+        "email": { "type": "string", "description": "Contact email address." },
+        "mobileNumber": { "type": "string", "description": "Mobile phone number." },
+        "userType": { "type": "string", "enum": ["CUSTOMER", "BARBER"], "description": "Account role." },
+        "accountStatus": { "type": "string", "enum": ["ACTIVE", "SUSPENDED"], "description": "Account activation status." },
+        "profilePhotoUri": { "type": "string", "description": "Optional profile photo URI." },
+        "preferredTimezone": { "type": "string", "description": "Preferred timezone ID (default Asia/Karachi)." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp of creation." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp of last update." }
+      },
+      "required": ["uid", "fullName", "email", "mobileNumber", "userType", "accountStatus", "createdAt", "updatedAt"]
+    },
+    "FavouriteSalon": {
+      "title": "FavouriteSalon",
+      "description": "A customer's bookmarked salon.",
+      "type": "object",
+      "properties": {
+        "salonId": { "type": "string" },
+        "salonName": { "type": "string" },
+        "salonAddress": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["salonId", "salonName", "createdAt"]
+    },
+    "SalonProfile": {
+      "title": "SalonProfile",
+      "description": "Salon / Barber shop business profile, schedule, and policies.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "salonName": { "type": "string" },
+        "ownerName": { "type": "string" },
+        "logoUri": { "type": "string" },
+        "coverImageUri": { "type": "string" },
+        "contactNumber": { "type": "string" },
+        "whatsappNumber": { "type": "string" },
+        "address": { "type": "string" },
+        "mapsLocation": { "type": "string" },
+        "workingDays": { "type": "array" },
+        "openingTimeMinutes": { "type": "integer" },
+        "closingTimeMinutes": { "type": "integer" },
+        "breakStartMinutes": { "type": "integer" },
+        "breakEndMinutes": { "type": "integer" },
+        "description": { "type": "string" },
+        "acceptedPaymentMethods": { "type": "array" },
+        "depositPercent": { "type": "integer" },
+        "allowCustomerCancellation": { "type": "boolean" },
+        "minCancellationHours": { "type": "integer" },
+        "cancellationRequiresApproval": { "type": "boolean" },
+        "cancellationPolicyText": { "type": "string" },
+        "holdTimeoutMinutes": { "type": "integer" },
+        "timezone": { "type": "string" },
+        "averageRating": { "type": "number" },
+        "reviewCount": { "type": "integer" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "ownerId", "salonName", "ownerName", "contactNumber", "address",
+        "workingDays", "openingTimeMinutes", "closingTimeMinutes",
+        "acceptedPaymentMethods", "allowCustomerCancellation", "minCancellationHours",
+        "holdTimeoutMinutes", "timezone", "averageRating", "reviewCount",
+        "isActive", "createdAt", "updatedAt"
+      ]
+    },
+    "SalonService": {
+      "title": "SalonService",
+      "description": "Male, Female, or Unisex service offered by a registered salon.",
+      "type": "object",
+      "properties": {
+        "salonId": { "type": "string" },
+        "barberId": { "type": "string" },
+        "salonName": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string", "enum": ["MALE", "FEMALE", "BOTH"] },
+        "description": { "type": "string" },
+        "imageUri": { "type": "string" },
+        "price": { "type": "number" },
+        "discountPrice": { "type": "number" },
+        "durationMinutes": { "type": "integer" },
+        "isAvailable": { "type": "boolean" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["salonId", "barberId", "salonName", "name", "category", "price", "durationMinutes", "isAvailable", "isActive", "createdAt", "updatedAt"]
+    },
+    "SlotLock": {
+      "title": "SlotLock",
+      "description": "Real-time non-PII slot availability state (SELECTED, BOOKED, CANCELLED).",
+      "type": "object",
+      "properties": {
+        "salonId": { "type": "string" },
+        "barberId": { "type": "string" },
+        "date": { "type": "string" },
+        "startMinutes": { "type": "integer" },
+        "endMinutes": { "type": "integer" },
+        "status": { "type": "string", "enum": ["SELECTED", "BOOKED", "CANCELLED"] },
+        "holderUid": { "type": "string" },
+        "appointmentId": { "type": "string" },
+        "expiresAtEpochMs": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["salonId", "barberId", "date", "startMinutes", "endMinutes", "status", "holderUid", "expiresAtEpochMs", "createdAt", "updatedAt"]
+    },
+    "Appointment": {
+      "title": "Appointment",
+      "description": "Booked appointment record with services, payment, and cancellation metadata.",
+      "type": "object",
+      "properties": {
+        "salonId": { "type": "string" },
+        "salonName": { "type": "string" },
+        "barberId": { "type": "string" },
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "customerEmail": { "type": "string" },
+        "customerGender": { "type": "string", "enum": ["MALE", "FEMALE", "OTHER"] },
+        "category": { "type": "string", "enum": ["MALE", "FEMALE"] },
+        "serviceIds": { "type": "array" },
+        "serviceNames": { "type": "array" },
+        "totalPrice": { "type": "number" },
+        "totalDurationMinutes": { "type": "integer" },
+        "date": { "type": "string" },
+        "startMinutes": { "type": "integer" },
+        "endMinutes": { "type": "integer" },
+        "specialInstructions": { "type": "string" },
+        "status": { "type": "string", "enum": ["PENDING", "BOOKED", "COMPLETED", "CANCELLED", "REJECTED"] },
+        "paymentMethod": { "type": "string", "enum": ["PAY_AT_SALON", "CASH", "ONLINE", "DEPOSIT"] },
+        "paymentStatus": { "type": "string", "enum": ["PENDING", "PAID", "REFUNDED"] },
+        "slotLockId": { "type": "string" },
+        "cancellationReason": { "type": "string" },
+        "cancelledByUid": { "type": "string" },
+        "cancelledByRole": { "type": "string" },
+        "cancelledAtEpochMs": { "type": "integer" },
+        "hasReview": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "salonId", "salonName", "barberId", "customerId", "customerName", "customerPhone",
+        "customerEmail", "customerGender", "category", "serviceIds", "serviceNames",
+        "totalPrice", "totalDurationMinutes", "date", "startMinutes", "endMinutes",
+        "status", "paymentMethod", "paymentStatus", "hasReview", "createdAt", "updatedAt"
+      ]
+    },
+    "SalonReview": {
+      "title": "SalonReview",
+      "description": "Customer rating and written review after completing an appointment.",
+      "type": "object",
+      "properties": {
+        "salonId": { "type": "string" },
+        "barberId": { "type": "string" },
+        "appointmentId": { "type": "string" },
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "rating": { "type": "integer" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["salonId", "barberId", "appointmentId", "customerId", "customerName", "rating", "createdAt"]
+    },
+    "AppNotification": {
+      "title": "AppNotification",
+      "description": "In-app notification for customer or barber events.",
+      "type": "object",
+      "properties": {
+        "recipientId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string" },
+        "appointmentId": { "type": "string" },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["recipientId", "senderId", "title", "message", "type", "isRead", "createdAt"]
+    },
+    "AppSettings": {
+      "title": "AppSettings",
+      "description": "Global application settings (default timezone PKT, slot hold timeout).",
+      "type": "object",
+      "properties": {
+        "defaultTimezone": { "type": "string" },
+        "defaultHoldMinutes": { "type": "integer" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["defaultTimezone", "defaultHoldMinutes", "updatedAt"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Super Admin role record.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user account and role records."
+    },
+    "/users/{userId}/favourites/{salonId}": {
+      "schema": { "$ref": "#/entities/FavouriteSalon" },
+      "description": "Customer favourite salons."
+    },
+    "/salons/{salonId}": {
+      "schema": { "$ref": "#/entities/SalonProfile" },
+      "description": "Registered salon business profiles."
+    },
+    "/services/{serviceId}": {
+      "schema": { "$ref": "#/entities/SalonService" },
+      "description": "Male, Female, and Both services managed by barbers."
+    },
+    "/slot_locks/{lockId}": {
+      "schema": { "$ref": "#/entities/SlotLock" },
+      "description": "Non-PII real-time slot locks (SELECTED, BOOKED, CANCELLED)."
+    },
+    "/appointments/{appointmentId}": {
+      "schema": { "$ref": "#/entities/Appointment" },
+      "description": "Customer and barber appointments."
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/SalonReview" },
+      "description": "Verified salon and barber reviews."
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/AppNotification" },
+      "description": "In-app notifications scoped per recipient."
+    },
+    "/app_settings/{settingId}": {
+      "schema": { "$ref": "#/entities/AppSettings" },
+      "description": "Global system configuration."
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminRecord" },
+      "description": "Authorized Super Admin accounts."
+    }
+  }
+}
